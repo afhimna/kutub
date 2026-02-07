@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buah tangan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(135deg,#05070f,#0a0f29);
+  color:#e6ecff;
+  padding:24px 14px 60px;
+}
+h1{
+  text-align:center;
+  color:#00eaff;
+  margin-bottom:14px;
+  text-shadow:0 0 18px rgba(0,234,255,.6);
+}
+
+.filter{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:26px;
+}
+.filter button{
+  background:transparent;
+  border:1px solid #00eaff;
+  color:#00eaff;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:.75rem;
+  cursor:pointer;
+  transition:.3s;
+}
+.filter button.active,
+.filter button:hover{
+  background:#00eaff;
+  color:#001018;
+}
+
+.book{
+  max-width:860px;
+  margin:0 auto 24px;
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:20px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 0 18px rgba(0,234,255,.15);
+  opacity:0;
+  transform:translateY(40px);
+  transition:.6s;
+}
+.book.visible{opacity:1;transform:none}
+
+.cover{
+  width:160px;
+  aspect-ratio:3/4;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 0 15px rgba(0,234,255,.4);
+}
+.cover img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.book-content{display:flex;flex-direction:column;gap:8px}
+.arabic{
+  font-family:Amiri,serif;
+  direction:rtl;
+  text-align:right;
+  font-size:1.35rem;
+  color:#9ff3ff;
+}
+.latin{font-size:.85rem;font-style:italic;color:#b9f1ff}
+.desc{font-size:.9rem;line-height:1.6}
+.badge{
+  align-self:flex-start;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.7rem;
+  background:rgba(0,234,255,.18);
+  border:1px solid rgba(0,234,255,.35);
+}
+
+@media(max-width:768px){
+  .book{grid-template-columns:1fr;text-align:center}
+  .arabic{text-align:center}
+  .cover{margin:auto}
+}
+
+#viewer{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+#viewer img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:16px;
+  box-shadow:0 0 40px rgba(0,234,255,.6);
+}
+#viewer span{
+  position:absolute;
+  top:18px;
+  right:24px;
+  font-size:28px;
+  cursor:pointer;
+  color:#00eaff;
+}
+
+.social-container{
+  margin-top:26px;
+  text-align:center;
+}
+
+.social-container p{
+  font-size:13px;
+  color:#bbb;
+  margin-bottom:14px;
+}
+
+.social-icons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+}
+
+.social-icons a{
+  display:block;
+  outline:none;
+  text-decoration:none;
+}
+
+.social-icon{
+  width:52px;
+  height:52px;
+  padding:6px;
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+  opacity:.85;
+  transition:.35s ease;
+  display:block
+}
+
+.social-icon:hover{
+  transform:scale(1.18) translateY(-4px);
+  opacity:1;
+  filter:brightness(1.15);
+}
+.social-icon.ig:hover{
+  box-shadow:
+    0 0 12px rgba(225,48,108,0.8),
+    0 0 25px rgba(253,29,29,0.6);
+}
+
+.social-icon.wa:hover{
+  box-shadow:
+    0 0 12px rgba(37,211,102,0.8),
+    0 0 25px rgba(37,211,102,0.6);
+}
+.support-text{
+  margin-top:18px;
+  font-size:13px;
+  color:#ccc;
+}
+.support-text a{
+  color:#9ff3ff;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.copyright{
+  margin-top:10px;
+  font-size:11px;
+  letter-spacing:.6px;
+  color:rgba(255,255,255,.35);
+}
+</style>
+</head>
+
+<body>
+
+<h1>📚 Buah tangan</h1>
+
+<div class="filter">
+  <button class="active" onclick="filterLevel('all',this)">Semua</button>
+  <button onclick="filterLevel('pemula',this)">Pemula</button>
+  <button onclick="filterLevel('menengah',this)">Menengah</button>
+  <button onclick="filterLevel('lanjutan',this)">Lanjutan</button>
+</div>
+
+<!-- KITAB -->
+
+<div class="book" data-level="lanjutan">
+  <div class="cover" onclick="openViewer(this)">
+    <img src="https://res.cloudinary.com/dmecuyazc/image/upload/w_600/taharri_pq3quc.jpg">
+  </div>
+  <div class="book-content">
+    <div class="arabic">التحري عن مضامين قصيدة القول الحري</div>
+    <div class="latin">At-Taharriy</div>
+    <div class="desc">Telaah qosidah Al-Qoul al-Hariy.</div>
+    <div class="badge">Lanjutan</div>
+  </div>
+</div>
+
+<div class="book" data-level="menengah">
+  <div class="cover" onclick="openViewer(this)">
+    <img src="https://res.cloudinary.com/dmecuyazc/image/upload/w_600/yawani_ijbpsu.jpg">
+  </div>
+  <div class="book-content">
+    <div class="arabic">يوانع الثمار من بساتين الأبرار</div>
+    <div class="latin">Yawāni‘ Ats-Tsimār</div>
+    <div class="desc">Kumpulan syair indah dan penuh hikmah.</div>
+    <div class="badge">Menengah</div>
+  </div>
+</div>
+
+<div class="book" data-level="pemula">
+  <div class="cover" onclick="openViewer(this)">
+    <img src="https://res.cloudinary.com/dmecuyazc/image/upload/w_600/nasihat_trjzyd.jpg">
+  </div>
+  <div class="book-content">
+    <div class="arabic">النصيحة الخالصة لقارئ الخلاصة</div>
+    <div class="latin">An-Naṣīḥah al-Kholishah</div>
+    <div class="desc">Mengenal lebih dekat Alfiyah.</div>
+    <div class="badge">Menengah</div>
+  </div>
+</div>
+
+<div class="book" data-level="menengah">
+  <div class="cover" onclick="openViewer(this)">
+    <img src="https://res.cloudinary.com/dmecuyazc/image/upload/w_600/madkhol_flexlp.jpg">
+  </div>
+  <div class="book-content">
+    <div class="arabic">المدخل إلى علم العروض</div>
+    <div class="latin">Al-Madkhol Ilā ‘Ilmi Al-‘Arūḍ</div>
+    <div class="desc">Pengantar ilmu ‘arudh.</div>
+    <div class="badge">Pemula</div>
+  </div>
+</div>
+
+<!-- FULLSCREEN VIEWER -->
+<div id="viewer" onclick="closeViewer()">
+  <span>✕</span>
+  <img>
+</div>
+
+<div class="social-container">
+    <p>Info lebih lanjut, hubungi kami:</p>
+    <div class="social-icons">
+        <a href="https://www.instagram.com/umarhamdan_a/" target="_blank">
+            <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738130/ig_nhlx8u.png" class="social-icon ig">
+        </a>
+        <a href="https://wa.me/62859106771139" target="_blank">
+            <img src="https://res.cloudinary.com/dmecuyazc/image/upload/v1766738128/wa_qpuube.png" class="social-icon wa">
+        </a>
+    </div>
+    <div class="support-text">
+        Berkenan mendukung kami? Silakan klik
+        <a href="https://www.google.com" target="_blank">di sini</a>.
+    </div>
+    <div class="copyright">
+        © 2025 Afhimna Dev. All Rights Reserved.
+    </div>
+</div>
+<script>
+/* Animasi muncul */
+const observer=new IntersectionObserver(e=>{
+  e.forEach(i=>{
+    if(i.isIntersecting){
+      i.target.classList.add('visible');
+      observer.unobserve(i.target);
+    }
+  });
+},{threshold:.2});
+document.querySelectorAll('.book').forEach(b=>observer.observe(b));
+
+/* Filter */
+function filterLevel(level,btn){
+  document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.book').forEach(book=>{
+    book.style.display=(level==='all'||book.dataset.level===level)?'grid':'none';
+  });
+}
+
+/* Fullscreen */
+function openViewer(el){
+  const viewer=document.getElementById('viewer');
+  viewer.style.display='flex';
+  viewer.querySelector('img').src=el.querySelector('img').src;
+}
+function closeViewer(){
+  document.getElementById('viewer').style.display='none';
+}
+</script>
+
+</body>
+</html>
